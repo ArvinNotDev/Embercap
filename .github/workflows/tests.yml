@@ -34,3 +34,14 @@ jobs:
           SDL_AUDIODRIVER: dummy
           PYGAME_HIDE_SUPPORT_PROMPT: '1'
         run: python main.py --smoke 10
+      - name: Build distributable ZIP
+        if: matrix.python-version == '3.11'
+        run: python tools/package_release.py --output "$RUNNER_TEMP/Embercap_Enhanced.zip"
+      - name: Upload distributable ZIP
+        if: matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Embercap_Enhanced
+          path: \${{ runner.temp }}/Embercap_Enhanced.zip
+          if-no-files-found: error
+          retention-days: 30
